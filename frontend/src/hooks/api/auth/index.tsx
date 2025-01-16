@@ -1,7 +1,12 @@
 export {
-    useGetAuthToken,
-    useSendMfaToken, 
-    useVerifyMfaToken,
-    useRevokeAllSessions,
-    useGetCommonPasswords
-} from './queries'
+  useGetAuthToken,
+  useOauthTokenExchange,
+  useResetPassword,
+  useSelectOrganization,
+  useSendMfaToken,
+  useSendPasswordResetEmail,
+  useSendVerificationEmail,
+  useVerifyMfaToken,
+  useVerifyPasswordResetCode,
+  useVerifySignupEmailVerificationCode
+} from "./queries";

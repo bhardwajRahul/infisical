@@ -1,76 +1,63 @@
 ---
 title: "Docker"
-description: "Learn to install Infisical purely on docker"
+description: "Learn how to run Infisical with Docker."
 ---
 
-The Infisical standalone version combines all the essential components of the application into a single container, making deployment and management more straightforward than using Kubernetes or Docker Compose. 
+Prerequisites:
+- Basic knowledge of [Docker](https://www.docker.com/)
+- Have Docker installed on your system. If not, follow the installation guide [here](https://docs.docker.com/get-docker/).
 
-Since all the components are bundled into one image, running this version of Infisical requires a minimum of **230MB of memory**.
+Infisical is available as a single Docker image to ease deployment.
+This Docker image only includes the application code, meaning you must supply a connection to a Postgres database and a Redis instance.
+The following guide provides a detailed step-by-step walkthrough on how you can deploy Infisical with Docker.
 
-This guide assumes you have basic knowledge of Docker and have it installed on your system. If you don't have Docker installed, please follow the official installation guide: https://docs.docker.com/get-docker/
+<Steps>
+  <Step title="Pull the Infisical Docker image">
+    Visit [Docker Hub](https://hub.docker.com/r/infisical/infisical/tags) and select a version of Infisical image you would like to deploy.
+    Then run the following command in your terminal to pull the specific Infisical Docker image.
+    
+    ```
+    docker pull infisical/infisical:<version>
+    ```
+    
+    Remember to replace `<version>` with the docker image tag of your choice.
+  </Step>
+  <Step title="Run Postgres schema migration ">
+    Before you can start the instance of Infisical, you need to run the database schema migrations. 
+    Follow the step by [step guide here](/self-hosting/configuration/schema-migrations) on running schema migrations for Infisical.
+    
+  </Step>
+  <Step title="Start Infisical">
+    For a minimal installation of Infisical, you must configure `ENCRYPTION_KEY`, `AUTH_SECRET`, `DB_CONNECTION_URI`, `SITE_URL`, and `REDIS_URL`.     [View all available configurations](/self-hosting/configuration/envars).
+    
 
-## Pull the Infisical Docker image
+    We recommend using Cloud-based Platform as a Service (PaaS) solutions for PostgreSQL and Redis to ensure high availability. 
 
-Open your terminal or command prompt and enter the following command to pull the Infisical Docker image:
+    Once you have added the required environment variables to your docker run command, execute it in your terminal to get Infisical up and running.
+    
+    For example:
 
-```
-docker pull infisical/infisical:latest
-```
+    ```bash
+    docker run -p 80:8080  \
+    -e ENCRYPTION_KEY=f40c9178624764ad85a6830b37ce239a \
+    -e AUTH_SECRET="q6LRi7c717a3DQ8JUxlWYkZpMhG4+RHLoFUVt3Bvo2U=" \
+    -e DB_CONNECTION_URI="<>" \
+    -e REDIS_URL="<>" \
+    -e SITE_URL="<>" \
+    infisical/infisical:<version>
+    ```
+    
+    <Warning>
+      The above environment variable values are only to be used as an example and should not be used in production 
+    </Warning>
+    
+      Once the container is running, verify the installation by opening your web browser and navigating to `http://localhost:80`.
 
-## Run with docker 
-The Infisical Docker image requires several required environment variables. 
-Add the required environment variables listed below to your docker run command. View [all configurable environment variables](../configuration/envars)
+      ![self-hosted sign up](/images/self-hosting/applicable-to-all/selfhost-signup.png)
+  </Step>
+</Steps>
 
-
-<ParamField query="ENCRYPTION_KEY" type="string" default="none" required>
-  Must be a random 16 byte hex string. Can be generated with `openssl rand -hex 16`
-</ParamField>
-
-<ParamField query="JWT_SIGNUP_SECRET" type="string" default="none" required>
-  Must be a random 16 byte hex string. Can be generated with `openssl rand -hex 16`
-</ParamField>
-
-<ParamField query="JWT_REFRESH_SECRET" type="string" default="none" required>
-  Must be a random 16 byte hex string. Can be generated with `openssl rand -hex 16`
-</ParamField>
-
-<ParamField query="JWT_AUTH_SECRET" type="string" default="none" required>
-  Must be a random 16 byte hex string. Can be generated with `openssl rand -hex 16`
-</ParamField>
-
-<ParamField query="JWT_MFA_SECRET" type="string" default="none" required>
-  Must be a random 16 byte hex string. Can be generated with `openssl rand -hex 16`
-</ParamField>
-
-<ParamField query="JWT_SERVICE_SECRET" type="string" default="none" required>
-  Must be a random 16 byte hex string. Can be generated with `openssl rand -hex 16`
-</ParamField>
-
-<ParamField query="MONGO_URL" type="string" default="none" required>
-  *TLS based connection string is not yet supported
-</ParamField>
-
-
-Once you have added the required environment variables to your docker run command, execute it in your terminal.
-
-```bash
-docker run -p 80:80  \
--e ENCRYPTION_KEY=f40c9178624764ad85a6830b37ce239a \
--e JWT_SIGNUP_SECRET=38ea90fb7998b92176080f457d890392 \
--e JWT_REFRESH_SECRET=7764c7bbf3928ad501591a3e005eb364 \
--e JWT_AUTH_SECRET=5239fea3a4720c0e524f814a540e14a2 \
--e JWT_SERVICE_SECRET=8509fb8b90c9b53e9e61d1e35826dcb5  \
--e MONGO_URL="<>" \
-infisical/infisical:latest
-```
-
-<Warning>
-  The sample environment variables listed above are only to be used as an example and should not be used in production 
-</Warning>
-
-## Verify the installation:
-Once the container is running, open a web browser and navigate to http://localhost:80. That's it! You have successfully installed the Infisical application using a single Docker image.
-
-<Info>
-Once installation is complete, you will have to create the first account. No default account is provided.
-</Info>
+### Additional discussion 
+It's important to note that the above is a basic example of deploying Infisical using Docker. 
+In practice, for production deployments, you may want to use container orchestration platforms such as AWS ECS, Google Cloud Run, or Kubernetes. 
+These platforms offer additional features like scalability, load balancing, and automated deployment, making them suitable for handling production-level traffic and providing high availability.

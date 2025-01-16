@@ -1,13 +1,12 @@
 /* eslint-disable new-cap */
-import crypto from 'crypto';
+import crypto from "crypto";
 
-import jsrp from 'jsrp';
+import jsrp from "jsrp";
 
-import issueBackupPrivateKey from '@app/pages/api/auth/IssueBackupPrivateKey';
-import SRP1 from '@app/pages/api/auth/SRP1';
+import { issueBackupPrivateKey, srp1 } from "@app/hooks/api/auth/queries";
 
-import generateBackupPDF from '../generateBackupPDF';
-import Aes256Gcm from './aes-256-gcm';
+import generateBackupPDF from "../generateBackupPDF";
+import Aes256Gcm from "./aes-256-gcm";
 
 const clientPassword = new jsrp.client();
 const clientKey = new jsrp.client();
@@ -51,21 +50,21 @@ const issueBackupKey = async ({
         let serverPublicKey;
         let salt;
         try {
-          const res = await SRP1({
+          const res = await srp1({
             clientPublicKey
           });
           serverPublicKey = res.serverPublicKey;
           salt = res.salt;
         } catch (err) {
           setBackupKeyError(true);
-          console.log('Wrong current password', err, 1);
+          console.log("Wrong current password", err, 1);
         }
 
-        clientPassword.setSalt(salt);
-        clientPassword.setServerPublicKey(serverPublicKey);
+        clientPassword.setSalt(salt as string);
+        clientPassword.setServerPublicKey(serverPublicKey as string);
         const clientProof = clientPassword.getProof(); // called M1
 
-        const generatedKey = crypto.randomBytes(16).toString('hex');
+        const generatedKey = crypto.randomBytes(16).toString("hex");
 
         clientKey.init(
           {
@@ -74,30 +73,30 @@ const issueBackupKey = async ({
           },
           async () => {
             clientKey.createVerifier(
-              async (err: any, result: { salt: string; verifier: string }) => {
+              async (_err: any, result: { salt: string; verifier: string }) => {
                 const { ciphertext, iv, tag } = Aes256Gcm.encrypt({
-                  text: String(localStorage.getItem('PRIVATE_KEY')),
+                  text: String(localStorage.getItem("PRIVATE_KEY")),
                   secret: generatedKey
                 });
 
-                const res = await issueBackupPrivateKey({
-                  encryptedPrivateKey: ciphertext,
-                  iv,
-                  tag,
-                  salt: result.salt,
-                  verifier: result.verifier,
-                  clientProof
-                });
+                try {
+                  await issueBackupPrivateKey({
+                    encryptedPrivateKey: ciphertext,
+                    iv,
+                    tag,
+                    salt: result.salt,
+                    verifier: result.verifier,
+                    clientProof
+                  });
 
-                if (res?.status === 400) {
-                  setBackupKeyError(true);
-                } else if (res?.status === 200) {
                   generateBackupPDF({
                     personalName,
                     personalEmail: email,
                     generatedKey
                   });
                   setBackupKeyIssued(true);
+                } catch {
+                  setBackupKeyError(true);
                 }
               }
             );
@@ -105,9 +104,9 @@ const issueBackupKey = async ({
         );
       }
     );
-  } catch (error) {
+  } catch {
     setBackupKeyError(true);
-    console.log('Failed to issue a backup key');
+    console.log("Failed to issue a backup key");
   }
   return true;
 };

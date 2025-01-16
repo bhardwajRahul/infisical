@@ -1,10 +1,12 @@
 # backend
 node_modules
 .env
+.env.test
 .env.dev
+.env.gamma
 .env.prod
 .env.infisical
-
+.env.migration
 *~
 *.swp
 *.swo
@@ -32,7 +34,7 @@ reports
 junit.xml
 
 # next.js
-/.next/
+.next/
 /out/
 
 # production
@@ -56,3 +58,18 @@ yarn-error.log*
 
 # Infisical init
 .infisical.json
+
+.infisicalignore
+
+# Editor specific
+.vscode/*
+.idea/*
+
+frontend-build
+
+*.tgz
+cli/infisical-merge
+cli/test/infisical-merge
+/backend/binary
+
+/npm/bin

@@ -1,10 +1,7 @@
-// @ts-nocheck
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable global-require */
-import { ComponentPropsWithRef, ElementType, ReactNode, Ref, useRef } from 'react';
-import { motion } from 'framer-motion'
-import Lottie from 'lottie-react'
-import { twMerge } from 'tailwind-merge';
+import { ComponentPropsWithRef, ElementType, ReactNode, Ref, useRef } from "react";
+import { DotLottie, DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { motion } from "framer-motion";
+import { twMerge } from "tailwind-merge";
 
 export type MenuProps = {
   children: ReactNode;
@@ -12,7 +9,7 @@ export type MenuProps = {
 };
 
 export const Menu = ({ children, className }: MenuProps): JSX.Element => {
-  return <ul className={twMerge('p-2', className)}>{children}</ul>;
+  return <ul className={twMerge("p-2", className)}>{children}</ul>;
 };
 
 export type MenuItemProps<T extends ElementType> = {
@@ -27,56 +24,64 @@ export type MenuItemProps<T extends ElementType> = {
   inputRef?: Ref<T>;
 };
 
-export const MenuItem = <T extends ElementType = 'button'>({
+export const MenuItem = <T extends ElementType = "button">({
   children,
   icon,
   className,
   isDisabled,
   isSelected,
-  as: Item = 'button',
+  as: Item = "button",
   description,
   // wrapping in forward ref with generic component causes the loss of ts definitions on props
   inputRef,
   ...props
 }: MenuItemProps<T> & ComponentPropsWithRef<T>): JSX.Element => {
-  const iconRef = useRef()
-
-  return( 
-    <a 
-      onMouseEnter={() => iconRef.current?.play()}
-      onMouseLeave={() => iconRef.current?.stop()} 
-    >
+  const iconRef = useRef<DotLottie | null>(null);
+  return (
+    <div onMouseEnter={() => iconRef.current?.play()} onMouseLeave={() => iconRef.current?.stop()}>
       <li
         className={twMerge(
-          'group px-1 py-2.5 mt-0.5 font-inter flex flex-col text-sm text-bunker-100 transition-all rounded cursor-pointer hover:bg-mineshaft-700 duration-50',
-          isSelected && 'bg-mineshaft-600 hover:bg-mineshaft-600',
-          isDisabled && 'hover:bg-transparent cursor-not-allowed',
+          "duration-50 group mt-0.5 flex cursor-pointer flex-col rounded px-1 py-2 font-inter text-sm text-bunker-100 transition-all hover:bg-mineshaft-700",
+          isSelected && "bg-mineshaft-600 hover:bg-mineshaft-600",
+          isDisabled && "cursor-not-allowed hover:bg-transparent",
           className
         )}
       >
-        <motion.span className="w-full flex flex-row items-center justify-start rounded-sm">
-          <Item type="button" role="menuitem" className="flex items-center relative" ref={inputRef} {...props}>
-            <div className={`${isSelected ? "visisble" : "invisible"} absolute w-[0.25rem] rounded-md h-8 bg-primary`}/>
-            {/* {icon && <span className="mr-3 ml-4 w-5 block group-hover:hidden">{icon}</span>} */}
-            <Lottie
-              lottieRef={iconRef}
-              style={{ width: 24, height: 24 }}
-              // eslint-disable-next-line import/no-dynamic-require
-              animationData={require(`../../../../public/lotties/${icon}.json`)}
-              loop={false}
-              autoplay={false}
-              className="my-auto ml-3 mr-3"
+        <motion.span className="flex w-full flex-row items-center justify-start rounded-sm">
+          <Item
+            type="button"
+            role="menuitem"
+            className="relative flex items-center"
+            ref={inputRef}
+            {...props}
+          >
+            <div
+              className={`${
+                isSelected ? "visisble" : "invisible"
+              } absolute -left-[0.28rem] h-5 w-[0.07rem] rounded-md bg-primary`}
             />
+            {icon && (
+              <div style={{ width: "22px", height: "22px" }} className="my-auto ml-1 mr-3">
+                <DotLottieReact
+                  dotLottieRefCallback={(el) => {
+                    iconRef.current = el;
+                  }}
+                  src={`/lotties/${icon}.json`}
+                  loop
+                  className="h-full w-full"
+                />
+              </div>
+            )}
             <span className="flex-grow text-left">{children}</span>
           </Item>
           {description && <span className="mt-2 text-xs">{description}</span>}
         </motion.span>
       </li>
-    </a>
-  )
+    </div>
+  );
 };
 
-MenuItem.displayName = 'MenuItem';
+MenuItem.displayName = "MenuItem";
 
 export type MenuGroupProps = {
   children: ReactNode;

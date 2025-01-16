@@ -1,6 +1,16 @@
 export {
-  useBatchSecretsOp,
+  useBackfillSecretReference,
+  useCreateSecretBatch,
+  useCreateSecretV3,
+  useDeleteSecretBatch,
+  useDeleteSecretV3,
+  useMoveSecrets,
+  useUpdateSecretBatch,
+  useUpdateSecretV3
+} from "./mutations";
+export {
   useGetProjectSecrets,
-  useGetProjectSecretsByKey,
+  useGetProjectSecretsAllEnv,
+  useGetSecretReferenceTree,
   useGetSecretVersion
-} from './queries';
+} from "./queries";
