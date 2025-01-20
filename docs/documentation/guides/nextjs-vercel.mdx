@@ -193,7 +193,7 @@ Next, navigate to your project's integrations tab in Infisical and press on the 
 
 ![integrations](../../images/integrations.png)
 
-![integrations vercel authorization](../../images/integrations-vercel-auth.png)
+![integrations vercel authorization](../../images/integrations/vercel/integrations-vercel-auth.png)
 
 <Note>
     Opting in for the Infisical-Vercel integration will break end-to-end encryption since Infisical will be able to read
@@ -205,8 +205,8 @@ Next, navigate to your project's integrations tab in Infisical and press on the 
 Now select **Production** for (the source) **Environment** and sync it to the **Production Environment** of the (target) application in Vercel.
 Lastly, press create integration to start syncing secrets to Vercel.
 
-![integrations vercel](../../images/integrations-vercel-create.png)
-![integrations vercel](../../images/integrations-vercel.png)
+![integrations vercel](../../images/integrations/vercel/integrations-vercel-create.png)
+![integrations vercel](../../images/integrations/vercel/integrations-vercel.png)
 
 You should now see your secret from Infisical appear as production environment variables in your Vercel project.
 
@@ -239,12 +239,6 @@ At this stage, you know how to use the Infisical-Vercel integration to sync prod
         Yes. Your secrets are still encrypted at rest. To note, most secret managers actually don't support end-to-end encryption.
         
         Check out the [security guide](/security/overview).
-    </Accordion>
-    <Accordion title="Is there way to retain end-to-end encryption for syncing production secrets to Vercel?">
-        Yes. You can also use the Infisical [Node SDK](https://github.com/Infisical/infisical-node) to fetch secrets back to your Next.js app
-        in both development and production.
-
-        Depending on how you use it, however, it may require certain pages to be server-side rendered.  
     </Accordion>
 </AccordionGroup>
 

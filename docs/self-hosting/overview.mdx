@@ -1,32 +1,53 @@
 ---
-title: "Introduction"
-description: "Explore deployment options for self hosting Infisical"
+title: ""
+sidebarTitle: "Introduction"
+description: "Learn how to self-host Infisical on your own infrastructure."
 ---
 
-To meet various compliance requirements, you may want to self-host Infisical instead of using [Infisical Cloud](https://app.infisical.com/). 
-Self-hosted Infisical allows you to maintain your sensitive information within your own infrastructure and network, ensuring complete control over your data. 
-Choose from a variety of deployment options listed below to get started.
+Self-hosting Infisical lets you retain data on your own infrastructure and network.
+Choose from a number of deployment options listed below to get started.
 
-<Card title="Kubernetes" color="#ea5a0c" href="deployment-options/kubernetes-helm">
-  Use our Helm chart to Install Infisical on your Kubernetes cluster
+<Card
+  title="Docker"
+  color="#000000"
+  icon="docker"
+  href="deployment-options/standalone-infisical"
+>
+  Use the fully packaged docker image to deploy Infisical anywhere.
 </Card>
 <CardGroup cols={2}>
-  <Card title="Digital Ocean" color="#16a34a" href="deployment-options/digital-ocean-marketplace">
-    Automatically create and deploy Infisical on to a Kubernetes cluster 
+  <Card
+    title="Docker Compose"
+    color="#000000"
+    icon="docker"
+    href="deployment-options/docker-compose"
+  >
+    Install Infisical using our Docker Compose template.
   </Card>
-  <Card title="Fly.io" color="#dc2626" href="deployment-options/fly.io">
-    Use our standalone docker image to deploy on Fly.io
-  </Card>
-  <Card title="Render.com" color="#dc2626" href="deployment-options/render">
-    Install on Render using our standalone docker image
-  </Card>
-  <Card title="AWS EC2" color="#0285c7" href="deployment-options/aws-ec2">
-    Install infisical with just a few clicks using our Cloud Formation template
-  </Card>
-  <Card title="Docker Compose" color="#0285c7" href="deployment-options/docker-compose">
-    Install Infisical using our Docker Compose template 
-  </Card>
-  <Card title="Docker" color="#0285c7" href="deployment-options/standalone-infisical">
-    Use the fully packaged, single docker image Infisical to deploy anywhere
+  <Card
+    title="Kubernetes"
+    color="#000000"
+    icon="gear-complex-code"
+    href="deployment-options/kubernetes-helm"
+  >
+  Use our Helm chart to Install Infisical on your Kubernetes cluster.
   </Card>
 </CardGroup>
+{/* <CardGroup cols={2}>
+  <Card
+    title="Native Deployment"
+    color="#000000"
+    icon="box"
+    href="deployment-options/native/standalone-binary"
+  >
+    Install Infisical on your Debian-based system without containers using our standalone binary.
+  </Card>
+  <Card
+    title="Native Deployment, High Availability"
+    color="#000000"
+    icon="boxes-stacked"
+    href="deployment-options/native/high-availability"
+  >
+    Install Infisical on your Debian-based instances without containers using our standalone binary with high availability out of the box.
+  </Card>
+</CardGroup> */}

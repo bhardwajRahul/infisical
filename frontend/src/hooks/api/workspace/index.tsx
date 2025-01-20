@@ -1,16 +1,46 @@
 export {
+  useAddGroupToWorkspace,
+  useDeleteGroupFromWorkspace,
+  useLeaveProject,
+  useMigrateProjectToV3,
+  useUpdateGroupWorkspaceRole
+} from "./mutations";
+export {
+  useAddIdentityToWorkspace,
   useCreateWorkspace,
   useCreateWsEnvironment,
+  useDeleteIdentityFromWorkspace,
+  useDeleteUserFromWorkspace,
   useDeleteWorkspace,
   useDeleteWsEnvironment,
+  useGetUpgradeProjectStatus,
   useGetUserWorkspaceMemberships,
   useGetUserWorkspaces,
-  useGetUserWsEnvironments,
+  useGetWorkspaceAuthorizations,
   useGetWorkspaceById,
+  useGetWorkspaceIdentityMembershipDetails,
+  useGetWorkspaceIdentityMemberships,
   useGetWorkspaceIndexStatus,
+  useGetWorkspaceIntegrations,
   useGetWorkspaceSecrets,
+  useGetWorkspaceSlackConfig,
+  useGetWorkspaceUserDetails,
+  useGetWorkspaceUsers,
+  useListWorkspaceCas,
+  useListWorkspaceCertificates,
+  useListWorkspaceCertificateTemplates,
+  useListWorkspaceGroups,
+  useListWorkspacePkiAlerts,
+  useListWorkspacePkiCollections,
+  useListWorkspaceSshCas,
+  useListWorkspaceSshCertificates,
+  useListWorkspaceSshCertificateTemplates,
   useNameWorkspaceSecrets,
-  useRenameWorkspace,
   useToggleAutoCapitalization,
-  useUpdateWsEnvironment
-} from './queries';
+  useUpdateIdentityWorkspaceRole,
+  useUpdateProject,
+  useUpdateUserWorkspaceRole,
+  useUpdateWsEnvironment,
+  useUpgradeProject
+} from "./queries";
+export { workspaceKeys } from "./query-keys";

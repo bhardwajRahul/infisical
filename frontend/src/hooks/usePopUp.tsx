@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from "react";
 
 interface UsePopUpProps {
   name: Readonly<string>;
@@ -10,14 +10,14 @@ interface UsePopUpProps {
  * checks which type of inputProps were given and converts them into key-names
  * SIDENOTE: On inputting give it as const and not string with (as const)
  */
-type UsePopUpState<T extends Readonly<string[]> | UsePopUpProps[]> = {
-  [P in T extends UsePopUpProps[] ? T[number]['name'] : T[number]]: {
+export type UsePopUpState<T extends Readonly<string[]> | UsePopUpProps[]> = {
+  [P in T extends UsePopUpProps[] ? T[number]["name"] : T[number]]: {
     isOpen: boolean;
-    data?: unknown;
+    data?: any;
   };
 };
 
-interface UsePopUpReturn<T extends Readonly<string[]> | UsePopUpProps[]> {
+export interface UsePopUpReturn<T extends Readonly<string[]> | UsePopUpProps[]> {
   popUp: UsePopUpState<T>;
   handlePopUpOpen: (popUpName: keyof UsePopUpState<T>, data?: unknown) => void;
   handlePopUpClose: (popUpName: keyof UsePopUpState<T>) => void;
@@ -35,7 +35,7 @@ export const usePopUp = <T extends Readonly<string[]> | UsePopUpProps[]>(
   const [popUp, setPopUp] = useState<UsePopUpState<T>>(
     Object.fromEntries(
       popUpNames.map((popUpName) =>
-        typeof popUpName === 'string'
+        typeof popUpName === "string"
           ? [popUpName, { isOpen: false }]
           : [popUpName.name, { isOpen: popUpName.isOpen }]
       ) // convert into an array of [[popUpName,state]] then into Object
@@ -53,7 +53,7 @@ export const usePopUp = <T extends Readonly<string[]> | UsePopUpProps[]>(
   const handlePopUpToggle = useCallback((popUpName: keyof UsePopUpState<T>, state?: boolean) => {
     setPopUp((oldState) => ({
       ...oldState,
-      [popUpName]: { isOpen: typeof state === 'undefined' ? !oldState[popUpName].isOpen : state }
+      [popUpName]: { isOpen: typeof state === "undefined" ? !oldState[popUpName].isOpen : state }
     }));
   }, []);
 

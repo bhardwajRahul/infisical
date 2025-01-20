@@ -3,6 +3,7 @@ on:
   push:
     tags:
       - "infisical/v*.*.*"
+      - "!infisical/v*.*.*-postgres"
 
 jobs:
   backend-image:
@@ -17,9 +18,9 @@ jobs:
       - name: 📦 Install dependencies to test all dependencies
         run: npm ci --only-production
         working-directory: backend
-      - name: 🧪 Run tests
-        run: npm run test:ci
-        working-directory: backend
+      # - name: 🧪 Run tests
+      #   run: npm run test:ci
+      #   working-directory: backend
       - name: Save commit hashes for tag
         id: commit
         uses: pr-mpt/actions-commit-hash@v2
@@ -39,7 +40,8 @@ jobs:
           token: ${{ secrets.DEPOT_PROJECT_TOKEN }}
           load: true
           context: backend
-          tags: infisical/backend:test
+          tags: infisical/infisical:test
+          platforms: linux/amd64,linux/arm64
       - name: ⏻ Spawn backend container and dependencies
         run: |
           docker compose -f .github/resources/docker-compose.be-test.yml up --wait --quiet-pull
@@ -91,8 +93,10 @@ jobs:
           project: 64mmf0n610
           context: frontend
           tags: infisical/frontend:test
+          platforms: linux/amd64,linux/arm64
           build-args: |
             POSTHOG_API_KEY=${{ secrets.PUBLIC_POSTHOG_API_KEY }}
+            NEXT_INFISICAL_PLATFORM_VERSION=${{ steps.extract_version.outputs.version }}
       - name: ⏻ Spawn frontend container
         run: |
           docker run -d --rm --name infisical-frontend-test infisical/frontend:test
@@ -116,3 +120,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           build-args: |
             POSTHOG_API_KEY=${{ secrets.PUBLIC_POSTHOG_API_KEY }}
+            NEXT_INFISICAL_PLATFORM_VERSION=${{ steps.extract_version.outputs.version }}

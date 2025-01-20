@@ -1,10 +1,10 @@
-import { ReactNode } from 'react';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import * as PopoverPrimitive from '@radix-ui/react-popover';
-import { twMerge } from 'tailwind-merge';
+import { ReactNode } from "react";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as PopoverPrimitive from "@radix-ui/react-popover";
+import { twMerge } from "tailwind-merge";
 
-import { IconButton } from '../IconButton';
+import { IconButton } from "../IconButton";
 
 export const PopoverTrigger = PopoverPrimitive.Trigger;
 
@@ -12,6 +12,7 @@ export const Popover = PopoverPrimitive.Root;
 
 export type PopoverContentProps = {
   children?: ReactNode;
+  arrowClassName?: string;
   hideCloseBtn?: boolean;
 } & PopoverPrimitive.PopoverContentProps;
 
@@ -19,18 +20,19 @@ export const PopoverContent = ({
   children,
   className,
   hideCloseBtn,
+  arrowClassName,
   ...props
 }: PopoverContentProps) => (
   <PopoverPrimitive.Portal>
     <PopoverPrimitive.Content
       className={twMerge(
         [
-          'relative z-[100] w-64 rounded-md bg-mineshaft-600 fill-mineshaft-600 p-4 pt-6 font-inter text-gray-200 shadow-md',
+          "relative z-[100] w-64 rounded-md bg-mineshaft-600 fill-mineshaft-600 p-4 pt-6 font-inter text-gray-200 shadow-md",
           // animation
-          'data-[state=open]:data-[side=bottom]:animate-slideUpAndFade',
-          'data-[state=open]:data-[side=top]:animate-slideDownAndFade',
-          'data-[state=open]:data-[side=left]:animate-slideRightAndFade',
-          'data-[state=open]:data-[side=right]:animate-slideLeftAndFade'
+          "data-[state=open]:data-[side=bottom]:animate-slideUpAndFade",
+          "data-[state=open]:data-[side=top]:animate-slideDownAndFade",
+          "data-[state=open]:data-[side=left]:animate-slideRightAndFade",
+          "data-[state=open]:data-[side=right]:animate-slideLeftAndFade"
         ],
         className
       )}
@@ -42,13 +44,13 @@ export const PopoverContent = ({
           <IconButton
             variant="plain"
             ariaLabel="close"
-            className="absolute top-0 right-1 rounded text-bunker-400 hover:text-bunker-50"
+            className="absolute right-1 top-0 rounded text-bunker-400 hover:text-bunker-50"
           >
             <FontAwesomeIcon icon={faTimes} size="lg" className="cursor-pointer" />
           </IconButton>
         </PopoverPrimitive.Close>
       )}
-      <PopoverPrimitive.Arrow className="fill-inherit" />
+      <PopoverPrimitive.Arrow className={twMerge("fill-inherit", arrowClassName)} />
     </PopoverPrimitive.Content>
   </PopoverPrimitive.Portal>
 );

@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from "react";
 
-import { useToggle } from '@app/hooks';
+import { useToggle } from "@app/hooks";
 
-import { Button } from '../Button';
-import { FormControl } from '../FormControl';
-import { Input } from '../Input';
-import { Modal, ModalClose, ModalContent } from '../Modal';
+import { Button } from "../Button";
+import { FormControl } from "../FormControl";
+import { Input } from "../Input";
+import { Modal, ModalClose, ModalContent } from "../Modal";
 
 type Props = {
   isOpen?: boolean;
@@ -13,7 +13,10 @@ type Props = {
   onChange?: (isOpen: boolean) => void;
   deleteKey: string;
   title: string;
+  subTitle?: string;
   onDeleteApproved: () => Promise<void>;
+  buttonText?: string;
+  children?: ReactNode;
 };
 
 export const DeleteActionModal = ({
@@ -22,13 +25,16 @@ export const DeleteActionModal = ({
   onChange,
   deleteKey,
   onDeleteApproved,
-  title
+  title,
+  subTitle = "This action is irreversible.",
+  buttonText = "Delete",
+  children
 }: Props): JSX.Element => {
-  const [inputData, setInputData] = useState('');
+  const [inputData, setInputData] = useState("");
   const [isLoading, setIsLoading] = useToggle();
 
   useEffect(() => {
-    setInputData('');
+    setInputData("");
   }, [isOpen]);
 
   const onDelete = async () => {
@@ -46,15 +52,15 @@ export const DeleteActionModal = ({
     <Modal
       isOpen={isOpen}
       onOpenChange={(isOpenState) => {
-        setInputData('');
+        setInputData("");
         if (onChange) onChange(isOpenState);
       }}
     >
       <ModalContent
         title={title}
-        subTitle="This action is irreversible!"
+        subTitle={subTitle}
         footerContent={
-          <div className="flex items-center">
+          <div className="mx-2 flex items-center">
             <Button
               className="mr-4"
               colorSchema="danger"
@@ -62,13 +68,13 @@ export const DeleteActionModal = ({
               onClick={onDelete}
               isLoading={isLoading}
             >
-              Delete
+              {buttonText}
             </Button>
             <ModalClose asChild>
               <Button variant="plain" colorSchema="secondary" onClick={onClose}>
                 Cancel
               </Button>
-            </ModalClose>{' '}
+            </ModalClose>{" "}
           </div>
         }
         onClose={onClose}
@@ -82,13 +88,18 @@ export const DeleteActionModal = ({
           <FormControl
             label={
               <div className="break-words pb-2 text-sm">
-                Type <span className="font-bold">{deleteKey}</span> to delete the resource
+                Type <span className="font-bold">{deleteKey}</span> to perform this action
               </div>
             }
-            className="mb-4"
+            className="mb-0"
           >
-            <Input value={inputData} onChange={(e) => setInputData(e.target.value)} />
+            <Input
+              value={inputData}
+              onChange={(e) => setInputData(e.target.value)}
+              placeholder={`Type ${deleteKey} here`}
+            />
           </FormControl>
+          {children}
         </form>
       </ModalContent>
     </Modal>
