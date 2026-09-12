@@ -1888,7 +1888,7 @@ export const secretV2BridgeServiceFactory = ({
           [`${TableName.SecretV2}.userId` as "userId"]: secretType === SecretType.Personal ? actorId : null
         })
       : secretVersionDAL
-          .findOneWithSecretTags({
+          .findOneWithTags({
             folderId,
             version,
             type: secretType,

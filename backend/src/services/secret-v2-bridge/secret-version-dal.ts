@@ -42,20 +42,20 @@ export const secretVersionV2BridgeDALFactory = (db: TDbClient) => {
     }
   };
 
-  const findOneWithSecretTags = async (filter: Partial<TSecretVersionsV2>, tx?: Knex) => {
+  const findOneWithTags = async (filter: Partial<TSecretVersionsV2>, tx?: Knex) => {
     try {
       const rawDocs = await (tx || db.replicaNode())(TableName.SecretVersionV2)
         // eslint-disable-next-line
         .where(buildFindFilter(filter, TableName.SecretVersionV2))
         .leftJoin(TableName.SecretV2, `${TableName.SecretVersionV2}.secretId`, `${TableName.SecretV2}.id`)
         .leftJoin(
-          TableName.SecretV2JnTag,
-          `${TableName.SecretV2}.id`,
-          `${TableName.SecretV2JnTag}.${TableName.SecretV2}Id`
+          TableName.SecretVersionV2Tag,
+          `${TableName.SecretVersionV2}.id`,
+          `${TableName.SecretVersionV2Tag}.${TableName.SecretVersionV2}Id`
         )
         .leftJoin(
           TableName.SecretTag,
-          `${TableName.SecretV2JnTag}.${TableName.SecretTag}Id`,
+          `${TableName.SecretVersionV2Tag}.${TableName.SecretTag}Id`,
           `${TableName.SecretTag}.id`
         )
         .leftJoin(TableName.SecretFolder, `${TableName.SecretV2}.folderId`, `${TableName.SecretFolder}.id`)
@@ -636,7 +636,7 @@ export const secretVersionV2BridgeDALFactory = (db: TDbClient) => {
     findByIdsWithLatestVersion,
     findByIdAndPreviousVersion,
     findOne,
-    findOneWithSecretTags,
+    findOneWithTags,
     findByParentVersionIds
   };
 };
